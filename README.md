@@ -34,7 +34,7 @@ tunnels:
 
 ```
 heroku-znc/
-  + lingr-znc.conf
+  + znc-ngrok.conf
   + znc.conf (copied from ~/.znc/configs/znc.conf)
   + znc.pem  (copied from ~/.znc/znc.pem)
   + .git/
