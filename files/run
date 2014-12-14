@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -eu
+
+./znc/bin/znc -f &
+export ZNC_PID=$!
+
+./ngrok -authtoken $NGROK_API_TOKEN -log stdout --config znc-ngrok.conf start znc &
+export NGROK_PID=$!
+
+echo "waiting for znc ($ZNC_PID) to exit..."
+while [ -e /proc/$ZNC_PID ]
+do
+    echo "${ZNC_PID} is running"
+    sleep 600
+done
+
+kill $NGROK_PID
+kill $ZNC_PID
+

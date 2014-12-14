@@ -1,0 +1,48 @@
+#!/bin/sh
+
+set -eu
+
+CWD=$PWD
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+DIST_DIR="$(cd "$(dirname "$0")" && pwd)"
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+echo "-----> Install ngrok"
+cd $DIST_DIR && cp -R ../files/ngrok $BUILD_DIR/ngrok | indent
+
+echo "-----> Install run script"
+cd $DIST_DIR && cp -R ../files/run $BUILD_DIR/run | indent
+
+mkdir -p /app
+mkdir -p $CACHE_DIR
+
+if [ -f $CACHE_DIR/znc-1.4.tar.gz ]; then
+    echo "-----> znc is already compiled"
+    cd $CACHE_DIR/znc-1.4 && make install | indent
+    cp -R /app/znc/ $BUILD_DIR/ | indent
+else
+    echo "-----> Donwload and Compile znc"
+    cd $CACHE_DIR && curl -O http://znc.in/releases/znc-1.4.tar.gz | indent
+    cd $CACHE_DIR && tar zxvf znc-1.4.tar.gz | indent
+    cd $CACHE_DIR/znc-1.4 && ./configure --prefix="/app/znc" | indent
+    cd $CACHE_DIR/znc-1.4 && make | indent
+    cd $CACHE_DIR/znc-1.4 && make install | indent
+    cp -R /app/znc/ $BUILD_DIR/
+fi
+
+echo "-----> Relocate znc config files"
+mkdir -p $BUILD_DIR/.znc/configs
+cp $BUILD_DIR/znc.conf $BUILD_DIR/.znc/configs/znc.conf
+cp $BUILD_DIR/znc.pem  $BUILD_DIR/.znc/znc.pem
+rm $BUILD_DIR/znc.conf $BUILD_DIR/znc.pem
+
+echo "-----> Setup Profile"
+cd $DIST_DIR && cp ../Procfile $BUILD_DIR/Procfile
+
+cd $CWD
+

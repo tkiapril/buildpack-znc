@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ -f $1/znc.conf ]; then
+    echo "znc"
+    exit 0
+else
+    exit 1
+fi
