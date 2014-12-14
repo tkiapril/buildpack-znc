@@ -57,7 +57,7 @@ $ hk set BUILDPACK_URL=https://github.com/boxelly/buildpack-znc.git
 # set ngrok.com authentication token.
 # NOTE:
 #   this buildpack is required with ngrok.com authtoken.
-#   So, you can only connect to ngrok.com public port.
+#   So, you can only connect to znc from ngrok.com public port.
 $ hk set NGROK_API_TOKEN=<your-ngrok.com-auth-token>
 
 # push to heroku with your repository
