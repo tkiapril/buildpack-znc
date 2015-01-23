@@ -21,17 +21,18 @@ cd $DIST_DIR && cp -R ../files/run $BUILD_DIR/run | indent
 mkdir -p /app
 mkdir -p $CACHE_DIR
 
-if [ -f $CACHE_DIR/znc-1.4.tar.gz ]; then
+if [ -f $CACHE_DIR/znc/znc ]; then
     echo "-----> znc is already compiled"
-    cd $CACHE_DIR/znc-1.4 && make install | indent
+    cd $CACHE_DIR && git pull
+    cd $CACHE_DIR/znc && make install | indent
     cp -R /app/znc/ $BUILD_DIR/ | indent
 else
     echo "-----> Donwload and Compile znc"
-    cd $CACHE_DIR && curl -O http://znc.in/releases/znc-1.4.tar.gz | indent
-    cd $CACHE_DIR && tar zxvf znc-1.4.tar.gz | indent
-    cd $CACHE_DIR/znc-1.4 && ./configure --prefix="/app/znc" | indent
-    cd $CACHE_DIR/znc-1.4 && make | indent
-    cd $CACHE_DIR/znc-1.4 && make install | indent
+    cd $CACHE_DIR && git clone git://github.com/znc/znc.git --recursive | indent
+    cd $CACHE_DIR/znc && ./bootstrap.sh | indent
+    cd $CACHE_DIR/znc && ./configure --prefix="/app/znc" | indent
+    cd $CACHE_DIR/znc && make -j2 | indent
+    cd $CACHE_DIR/znc && make install | indent
     cp -R /app/znc/ $BUILD_DIR/
 fi
 
