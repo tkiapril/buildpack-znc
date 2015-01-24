@@ -23,7 +23,7 @@ mkdir -p $CACHE_DIR
 
 if [ -f $CACHE_DIR/znc/znc ]; then
     echo "-----> znc is already compiled"
-    cd $CACHE_DIR && git pull
+    cd $CACHE_DIR/znc && git pull
     cd $CACHE_DIR/znc && make install | indent
     cp -R /app/znc/ $BUILD_DIR/ | indent
 else
