@@ -5,7 +5,7 @@ set -eu
 ./znc/bin/znc -f &
 export ZNC_PID=$!
 
-./ngrok -log stdout --config znc-ngrok.conf start znc &
+./ngrok -log stdout --config ngrok.conf start znc &
 export NGROK_PID=$!
 
 echo "waiting for znc ($ZNC_PID) to exit..."
